@@ -3,20 +3,11 @@
 const gameBoard = (function () {
     let gameTiles = [null, null, null, null, null, null, null, null, null];
 
-    const getGameBoard = () => [...gameTiles];
-
     const resetGameBoard = () =>
         (gameTiles = [null, null, null, null, null, null, null, null, null]);
 
     const updateGameBoard = (z, tilePiece) => {
-        let updated;
-        if (gameTiles[z] === null) {
-            gameTiles[z] = tilePiece;
-            updated = true;
-        } else {
-            updated = false;
-        }
-        return updated;
+        gameTiles[z] = tilePiece;
     };
 
     const winningCombos = [
@@ -30,25 +21,32 @@ const gameBoard = (function () {
         [2, 4, 6],
     ];
 
-    const winnerCheck = (tilePiece1, tilePiece2) => {
-        let winner;
-        winningCombos.forEach((element) => {
+    const winnerCheck = (currentPlayer) => {
+        //updating this to work with one tilepiece
+        let i = 0;
+        let winner = null;
+        while (i < 8 && winner === null) {
             if (
-                gameTiles[element[0]] === gameTiles[element[1]] &&
-                gameTiles[element[0]] === gameTiles[element[2]] &&
-                gameTiles[element[0]] !== null
+                gameTiles[winningCombos[i][0]] ===
+                    gameTiles[winningCombos[i][1]] &&
+                gameTiles[winningCombos[i][0]] ===
+                    gameTiles[winningCombos[i][2]] &&
+                gameTiles[winningCombos[i][0]] !== null
             ) {
-                if (gameTiles[element[0]] === tilePiece1) {
-                    winner = 1;
-                } else if (gameTiles[element[0]] === tilePiece2) {
-                    winner = 2;
-                }
+                winner = currentPlayer;
             }
-        });
-        return winner;
+            i++;
+        }
+        if (gameTiles.includes(null) !== true && winner === null) {
+            game.tie();
+        } else if (typeof winner === "number") {
+            game.winner(currentPlayer);
+        } else {
+            displayController.updateTurn();
+        }
     };
 
-    return { updateGameBoard, getGameBoard, winnerCheck, resetGameBoard };
+    return { updateGameBoard, winnerCheck, resetGameBoard };
 })();
 
 // Players
@@ -70,119 +68,210 @@ function createPlayer(name, tilePiece) {
 
 const displayController = (function () {
     // document queries
+    const playerOneInfo = document.querySelector(".player-1");
     const playerOneName = document.querySelector(".player-1-name");
     const playerOneScore = document.querySelector(".player-1-score");
+    const playerOneSymbol = document.querySelector(".player-1-symbol");
+    const playerTwoInfo = document.querySelector(".player-2");
     const playerTwoName = document.querySelector(".player-2-name");
     const playerTwoScore = document.querySelector(".player-2-score");
+    const playerTwoSymbol = document.querySelector(".player-2-symbol");
 
     const displayGrid = document.querySelector(".tile-grid");
+    let currentPlayer = 1;
+    let currentRound = 1;
 
     // functions
-    const updatePlayerName = (playerOne, playerTwo) => {
-        playerOneName.textContent = playerOne.name;
-        playerTwoName.textContent = playerTwo.name;
+
+    const initializeEventListeners = () => {
+        for (let i = 0; i < 9; i++) {
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .addEventListener("click", game.playTurn);
+        }
     };
-    const updatePlayerScore = (playerOne, playerTwo) => {
-        playerOneScore.textContent = playerOne.getScore();
-        playerTwoScore.textContent = playerTwo.getScore();
+
+    const updatePlayerInfo = (playerOne, playerTwo) => {
+        playerOneName.textContent = playerOne.name;
+        playerOneSymbol.textContent = playerOne.tilePiece;
+        playerOneScore.textContent = 0;
+        playerTwoName.textContent = playerTwo.name;
+        playerTwoSymbol.textContent = playerTwo.tilePiece;
+        playerTwoScore.textContent = 0;
+    };
+    const updatePlayerScore = (playerOneWins, playerTwoWins) => {
+        playerOneScore.textContent = playerOneWins;
+        playerTwoScore.textContent = playerTwoWins;
     };
     const updateGameBoard = (z, tilePiece) => {
         displayGrid.querySelector(`.cell-${z}`).textContent = tilePiece;
     };
 
     const updateTurn = () => {
-        playerOneName.classList.toggle("your-turn");
-        playerTwoName.classList.toggle("your-turn");
+        playerOneInfo.classList.toggle("your-turn");
+        playerTwoInfo.classList.toggle("your-turn");
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
     };
 
-    return { updatePlayerName, updatePlayerScore, updateGameBoard, updateTurn };
+    const getCurrentTile = () => {
+        return currentPlayer === 1
+            ? playerOneSymbol.textContent
+            : playerTwoSymbol.textContent;
+    };
+
+    const getCurrentPlayer = () => {
+        return currentPlayer === 1 ? 1 : 2;
+    };
+
+    const resetUI = (fullReset) => {
+        if (fullReset) {
+            currentPlayer = 1;
+            currentRound = 1;
+            playerOneInfo.classList.add("your-turn");
+            playerTwoInfo.classList.remove("your-turn");
+        } else {
+            currentRound++;
+            if (currentRound % 2 === 0) {
+                currentPlayer = 2;
+                playerOneInfo.classList.remove("your-turn");
+                playerTwoInfo.classList.add("your-turn");
+            } else {
+                currentPlayer = 1;
+                playerOneInfo.classList.add("your-turn");
+                playerTwoInfo.classList.remove("your-turn");
+            }
+        }
+        for (let i = 0; i < 9; i++) {
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .removeEventListener("click", game.playTurn);
+            displayGrid.querySelector(`.cell-${i}`).textContent = "";
+        }
+    };
+
+    return {
+        initializeEventListeners,
+        updatePlayerInfo,
+        updatePlayerScore,
+        updateGameBoard,
+        updateTurn,
+        getCurrentTile,
+        getCurrentPlayer,
+        resetUI,
+    };
 })();
 
 // Game Controller
 
 const game = (function () {
-    const initializeGame = () => {
-        const dialog = document.getElementById("dialog");
-        const playGameBtn = dialog.querySelector("#play-game");
-        const playerOneNameInput = document.querySelector("#player-ones-name");
-        const playerOneSymbolInput = document.querySelector(
-            "#player-ones-symbol"
-        );
-        const playerTwoNameInput = document.querySelector("#player-twos-name");
-        const playerTwoSymbolInput = document.querySelector(
-            "#player-twos-symbol"
-        );
+    let playerOne;
+    let playerTwo;
 
+    const dialog = document.getElementById("dialog");
+    const playerForm = document.querySelector(".input-form");
+    const playerOneNameInput = document.querySelector("#player-ones-name");
+    const playerOneSymbolInput = document.querySelector("#player-ones-symbol");
+    const playerTwoNameInput = document.querySelector("#player-twos-name");
+    const playerTwoSymbolInput = document.querySelector("#player-twos-symbol");
+
+    const dialogPlayAgain = document.getElementById("dialog-play-again");
+    const playAgainBtn = dialogPlayAgain.querySelector("#play-again");
+    const resetBtn = dialogPlayAgain.querySelector("#reset");
+    const result = dialogPlayAgain.querySelector(".result");
+
+    const initializeGame = () => {
         dialog.showModal();
 
-        playGameBtn.addEventListener("click", (event) => {
-            const playerOne = createPlayer(
+        playerForm.addEventListener("submit", playGameBtnFunction);
+    };
+
+    const playTurn = (event) => {
+        let z = event.target.dataset.index;
+        let currentTilePiece = displayController.getCurrentTile();
+        let currentPlayer = displayController.getCurrentPlayer();
+        displayController.updateGameBoard(z, currentTilePiece);
+        gameBoard.updateGameBoard(z, currentTilePiece);
+        event.target.removeEventListener("click", playTurn);
+        gameBoard.winnerCheck(currentPlayer);
+    };
+
+    const winner = (player) => {
+        if (player === 1) {
+            playerOne.winAGame();
+        } else if (player === 2) {
+            playerTwo.winAGame();
+        }
+        displayController.updatePlayerScore(
+            playerOne.getScore(),
+            playerTwo.getScore()
+        );
+        playAgain(player);
+    };
+
+    const tie = () => {
+        playAgain("tie");
+    };
+
+    const playAgain = (gameResult) => {
+        if (gameResult === 1) {
+            result.textContent = `You win, ${playerOne.name}!`;
+        } else if (gameResult === 2) {
+            result.textContent = `You win, ${playerTwo.name}!`;
+        } else {
+            result.textContent = "It's a tie! Good game!";
+        }
+
+        dialogPlayAgain.showModal();
+
+        playAgainBtn.addEventListener("click", playAgainBtnFunction);
+
+        resetBtn.addEventListener("click", resetBtnFunction);
+    };
+
+    const playGameBtnFunction = (event) => {
+        event.preventDefault();
+        if (playerForm.checkValidity()) {
+            playerOne = createPlayer(
                 playerOneNameInput.value,
                 playerOneSymbolInput.value
             );
-            const playerTwo = createPlayer(
+            playerTwo = createPlayer(
                 playerTwoNameInput.value,
                 playerTwoSymbolInput.value
             );
-            event.preventDefault();
             dialog.close();
-            playRound(playerOne, playerTwo);
-        });
-    };
-
-    const playRound = (playerOne, playerTwo) => {
-        // play a round
-        for (let i = 0; i < 1; i++) {
-            //update i to be < 9 when done
-            // updating gameboard for code building - to be deleted
-            gameBoard.updateGameBoard(0, playerOne.tilePiece);
-            gameBoard.updateGameBoard(3, playerTwo.tilePiece);
-            gameBoard.updateGameBoard(1, playerOne.tilePiece);
-            gameBoard.updateGameBoard(4, playerTwo.tilePiece);
-            gameBoard.updateGameBoard(2, playerOne.tilePiece);
-            gameBoard.updateGameBoard(6, playerTwo.tilePiece);
-
-            // click event to get div index (z), then update gameboard based on index and turn #
-
-            if (i % 2 === 0) {
-                let z = 0; //to be deleted
-                // highlight player 1?
-                if (gameBoard.updateGameBoard(z, playerOne.tilePiece)) {
-                    gameBoard.updateGameBoard(z, playerOne.tilePiece);
-                    displayController.updateGameBoard(z, playerOne.tilePiece);
-                }
-            } else {
-                let z = 3; //to be deleted
-                // highlight player 2?
-                if (gameBoard.updateGameBoard(z, playerTwo.tilePiece)) {
-                    gameBoard.updateGameBoard(z, playerTwo.tilePiece);
-                    displayController.updateGameBoard(z, playerTwo.tilePiece);
-                }
-            }
-            displayController.updateTurn();
-
-            // check to see if there was a winner after each move
-            let winningPlayer = gameBoard.winnerCheck(
-                playerOne.tilePiece,
-                playerTwo.tilePiece
-            );
-            if (winningPlayer || (winningPlayer === undefined && i === 8)) {
-                if (winningPlayer === 1) {
-                    playerOne.winAGame();
-                    console.log(`${playerOne.name} wins! Play again?`);
-                } else if (winningPlayer === 2) {
-                    playerTwo.winAGame();
-                    console.log(`${playerTwo.name} wins! Play again?`);
-                } else {
-                    console.log(`It's a tie! Play again?`);
-                }
-                // code here to ask if you want to start from scratch or go again
-                // if reset, initializeGame, then reset gameboard, then playround
-                gameBoard.resetGameBoard();
-            }
+            displayController.updatePlayerInfo(playerOne, playerTwo);
+            displayController.initializeEventListeners();
+        } else {
+            playerForm.reportValidity();
         }
     };
 
-    // actually playing a game, calling the following functions defined above
-    initializeGame();
+    const playAgainBtnFunction = (event) => {
+        event.preventDefault();
+        dialogPlayAgain.close();
+        displayController.resetUI(false);
+        gameBoard.resetGameBoard();
+        displayController.initializeEventListeners();
+    };
+
+    const resetBtnFunction = (event) => {
+        event.preventDefault();
+        dialogPlayAgain.close();
+        displayController.resetUI(true);
+        gameBoard.resetGameBoard();
+        initializeGame();
+    };
+
+    return {
+        initializeGame,
+        playTurn,
+        winner,
+        tie,
+        playGameBtnFunction,
+        playAgainBtnFunction,
+        resetBtnFunction,
+    };
 })();
+
+game.initializeGame();
