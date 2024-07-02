@@ -22,7 +22,6 @@ const gameBoard = (function () {
     ];
 
     const winnerCheck = (currentPlayer) => {
-        //updating this to work with one tilepiece
         let i = 0;
         let winner = null;
         while (i < 8 && winner === null) {
@@ -88,6 +87,12 @@ const displayController = (function () {
             displayGrid
                 .querySelector(`.cell-${i}`)
                 .addEventListener("click", game.playTurn);
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .addEventListener("mouseover", mouseoverEvent);
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .addEventListener("mouseout", mouseoutEvent);
         }
     };
 
@@ -145,8 +150,24 @@ const displayController = (function () {
             displayGrid
                 .querySelector(`.cell-${i}`)
                 .removeEventListener("click", game.playTurn);
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .removeEventListener("mouseover", mouseoverEvent);
+            displayGrid
+                .querySelector(`.cell-${i}`)
+                .removeEventListener("mouseout", mouseoutEvent);
             displayGrid.querySelector(`.cell-${i}`).textContent = "";
         }
+    };
+
+    const mouseoverEvent = (event) => {
+        event.target.textContent = getCurrentTile();
+        event.target.classList.add("hovering");
+    };
+
+    const mouseoutEvent = (event) => {
+        event.target.textContent = "";
+        event.target.classList.remove("hovering");
     };
 
     return {
@@ -158,6 +179,8 @@ const displayController = (function () {
         getCurrentTile,
         getCurrentPlayer,
         resetUI,
+        mouseoverEvent,
+        mouseoutEvent,
     };
 })();
 
@@ -192,6 +215,15 @@ const game = (function () {
         displayController.updateGameBoard(z, currentTilePiece);
         gameBoard.updateGameBoard(z, currentTilePiece);
         event.target.removeEventListener("click", playTurn);
+        event.target.removeEventListener(
+            "mouseover",
+            displayController.mouseoverEvent
+        );
+        event.target.removeEventListener(
+            "mouseout",
+            displayController.mouseoutEvent
+        );
+        event.target.classList.remove("hovering");
         gameBoard.winnerCheck(currentPlayer);
     };
 

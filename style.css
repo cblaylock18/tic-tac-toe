@@ -78,7 +78,8 @@ summary,
 time,
 mark,
 audio,
-video {
+video,
+input {
     margin: 0;
     padding: 0;
     border: 0;
@@ -131,6 +132,14 @@ body {
     grid-template-rows: min-content;
     place-items: center;
     gap: 20px;
+    background-image: linear-gradient(
+        135deg,
+        rgb(255, 171, 255),
+        rgb(227, 198, 255),
+        rgb(177, 216, 255),
+        rgb(196, 255, 196)
+    );
+    opacity: 0.75;
 }
 
 h1 {
@@ -177,8 +186,16 @@ h1 {
     gap: 15px;
 }
 
+.hovering {
+    color: grey;
+}
+
 .grid-cell {
     border: 1px solid black;
+    display: grid;
+    font-size: 100px;
+    place-items: center;
+    cursor: pointer;
 }
 
 .your-turn {
@@ -195,22 +212,41 @@ h1 {
 }
 
 dialog {
-    max-width: 500px;
-    max-height: 400px;
+    width: clamp(min-content, 35%, 600px);
     min-height: min-content;
 }
 
 .input-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 1fr);
-    grid-template-rows: repeat(2, minmax(100px, 4fr)) minmax(min-content, 1fr);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    font-size: 1.5rem;
 }
 
-.player-1-input-info,
-.player-2-input-info {
-    display: grid;
-    place-items: center;
+.input-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 16px 8px;
+    gap: 16px;
+}
+
+.input-info > div > input,
+.input-info > input {
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+#player-ones-symbol,
+#player-twos-symbol {
     text-align: center;
+}
+
+.play-button-div {
+    display: flex;
+    justify-content: center;
 }
 
 ::backdrop {
@@ -222,4 +258,23 @@ dialog {
         green
     );
     opacity: 0.75;
+}
+
+#play-game {
+    font-family: monospace;
+    font-size: 2rem;
+    padding: 8px 40px;
+    background-color: black;
+    color: white;
+    font-weight: bolder;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+#play-game:hover {
+    background-color: rgb(59, 59, 59);
+}
+
+#play-game:active {
+    border: 2px inset rgb(0, 255, 13);
 }
