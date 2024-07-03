@@ -134,6 +134,10 @@ const displayController = (function () {
             currentRound = 1;
             playerOneInfo.classList.add("your-turn");
             playerTwoInfo.classList.remove("your-turn");
+            document.querySelector("#player-ones-name").value = "";
+            document.querySelector("#player-twos-name").value = "";
+            document.querySelector("#O").checked = true;
+            document.querySelector("#X").checked = true;
         } else {
             currentRound++;
             if (currentRound % 2 === 0) {
@@ -158,9 +162,6 @@ const displayController = (function () {
                 .removeEventListener("mouseout", mouseoutEvent);
             displayGrid.querySelector(`.cell-${i}`).textContent = "";
         }
-        document.querySelector("#player-ones-name").value = "";
-
-        document.querySelector("#player-twos-name").value = "";
     };
 
     const mouseoverEvent = (event) => {
@@ -269,7 +270,6 @@ const game = (function () {
         const playerTwoSymbolInput = document.querySelector(
             'input[name="player-twos-symbol"]:checked'
         );
-        console.log(playerOneSymbolInput.value);
         if (playerForm.checkValidity()) {
             playerOne = createPlayer(
                 playerOneNameInput.value,
