@@ -8,143 +8,148 @@
         <title>Tic-Tac-Toe</title>
     </head>
     <body>
-        <h1 class="heading">Tic-Tac-Toe</h1>
-        <div class="player-info">
-            <div class="player-1 your-turn">
-                <span class="player-1-name name"></span>
-                <span class="player-1-symbol symbol"></span>
-                <span>Wins</span>
-                <span class="player-1-score score">0</span>
+        <div>
+            <h1 class="heading">Tic-Tac-Toe</h1>
+            <div class="player-info">
+                <div class="player-1 your-turn">
+                    <span class="player-1-name name"></span>
+                    <span class="player-1-symbol symbol"></span>
+                    <span>Wins</span>
+                    <span class="player-1-score score">0</span>
+                </div>
+                <div class="player-2">
+                    <span class="player-2-name name"></span>
+                    <span class="player-2-symbol symbol"></span>
+                    <span>Wins</span>
+                    <span class="player-2-score score">0</span>
+                </div>
             </div>
-            <div class="player-2">
-                <span class="player-2-name name"></span>
-                <span class="player-2-symbol symbol"></span>
-                <span>Wins</span>
-                <span class="player-2-score score">0</span>
+            <div class="tile-grid">
+                <div class="grid-cell cell-0" data-index="0"></div>
+                <div class="grid-cell cell-1" data-index="1"></div>
+                <div class="grid-cell cell-2" data-index="2"></div>
+                <div class="grid-cell cell-3" data-index="3"></div>
+                <div class="grid-cell cell-4" data-index="4"></div>
+                <div class="grid-cell cell-5" data-index="5"></div>
+                <div class="grid-cell cell-6" data-index="6"></div>
+                <div class="grid-cell cell-7" data-index="7"></div>
+                <div class="grid-cell cell-8" data-index="8"></div>
             </div>
-        </div>
-        <div class="tile-grid">
-            <div class="grid-cell cell-0" data-index="0"></div>
-            <div class="grid-cell cell-1" data-index="1"></div>
-            <div class="grid-cell cell-2" data-index="2"></div>
-            <div class="grid-cell cell-3" data-index="3"></div>
-            <div class="grid-cell cell-4" data-index="4"></div>
-            <div class="grid-cell cell-5" data-index="5"></div>
-            <div class="grid-cell cell-6" data-index="6"></div>
-            <div class="grid-cell cell-7" data-index="7"></div>
-            <div class="grid-cell cell-8" data-index="8"></div>
-        </div>
-        <dialog id="dialog">
-            <form method="dialog" class="input-form">
-                <div class="player-1-input-info">
-                    <div class="input-info">
-                        <label> Player One</label>
-                        <input
-                            type="text"
-                            id="player-ones-name"
-                            name="player-ones-name"
-                            placeholder="Player One's Name"
-                            required
-                        />
-                    </div>
-                    <div class="input-info">
-                        <div>
-                            <fieldset>
-                                <legend>Select a Symbol!</legend>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="X"
-                                        name="player-ones-symbol"
-                                        value="❌"
-                                        checked
-                                        required
-                                    />
-                                    <label for="X">❌</label>
-                                    <input
-                                        type="radio"
-                                        id="lamb"
-                                        name="player-ones-symbol"
-                                        value="🐑"
-                                        required
-                                    />
-                                    <label for="lamb">🐑</label>
-                                    <input
-                                        type="radio"
-                                        id="apple"
-                                        name="player-ones-symbol"
-                                        value="🍎"
-                                        required
-                                    />
-                                    <label for="apple">🍎</label>
-                                </div>
-                            </fieldset>
+            <dialog id="dialog">
+                <form method="dialog" class="input-form">
+                    <div class="player-1-input-info">
+                        <div class="input-info">
+                            <label> Player One</label>
+                            <input
+                                type="text"
+                                id="player-ones-name"
+                                name="player-ones-name"
+                                placeholder="Player One's Name"
+                                required
+                            />
+                        </div>
+                        <div class="input-info">
+                            <div>
+                                <fieldset>
+                                    <legend>Select a Symbol!</legend>
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            id="X"
+                                            name="player-ones-symbol"
+                                            value="❌"
+                                            checked
+                                            required
+                                        />
+                                        <label for="X">❌</label>
+                                        <input
+                                            type="radio"
+                                            id="lamb"
+                                            name="player-ones-symbol"
+                                            value="🐑"
+                                            required
+                                        />
+                                        <label for="lamb">🐑</label>
+                                        <input
+                                            type="radio"
+                                            id="apple"
+                                            name="player-ones-symbol"
+                                            value="🍎"
+                                            required
+                                        />
+                                        <label for="apple">🍎</label>
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="player-2-input-info">
-                    <div class="input-info">
-                        <label> Player Two</label>
-                        <input
-                            type="text"
-                            id="player-twos-name"
-                            name="player-twos-name"
-                            placeholder="Player Two's Name"
-                            required
-                        />
-                    </div>
-                    <div class="input-info">
-                        <div>
-                            <fieldset>
-                                <legend>Select a Symbol!</legend>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="O"
-                                        name="player-twos-symbol"
-                                        value="🇴"
-                                        required
-                                        checked
-                                    />
-                                    <label for="O">🇴</label>
-                                    <input
-                                        type="radio"
-                                        id="llama"
-                                        name="player-twos-symbol"
-                                        value="🦙"
-                                        required
-                                    />
-                                    <label for="llama">🦙</label>
-                                    <input
-                                        type="radio"
-                                        id="orange"
-                                        name="player-twos-symbol"
-                                        value="🍊"
-                                        required
-                                    />
-                                    <label for="orange">🍊</label>
-                                </div>
-                            </fieldset>
+                    <div class="player-2-input-info">
+                        <div class="input-info">
+                            <label> Player Two</label>
+                            <input
+                                type="text"
+                                id="player-twos-name"
+                                name="player-twos-name"
+                                placeholder="Player Two's Name"
+                                required
+                            />
+                        </div>
+                        <div class="input-info">
+                            <div>
+                                <fieldset>
+                                    <legend>Select a Symbol!</legend>
+                                    <div>
+                                        <input
+                                            type="radio"
+                                            id="O"
+                                            name="player-twos-symbol"
+                                            value="🇴"
+                                            required
+                                            checked
+                                        />
+                                        <label for="O">🇴</label>
+                                        <input
+                                            type="radio"
+                                            id="llama"
+                                            name="player-twos-symbol"
+                                            value="🦙"
+                                            required
+                                        />
+                                        <label for="llama">🦙</label>
+                                        <input
+                                            type="radio"
+                                            id="orange"
+                                            name="player-twos-symbol"
+                                            value="🍊"
+                                            required
+                                        />
+                                        <label for="orange">🍊</label>
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="play-button-div">
-                    <button type="submit" id="play-game">Play!</button>
-                </div>
-            </form>
-        </dialog>
-        <dialog id="dialog-play-again">
-            <h2 class="result"></h2>
-            <form method="dialog">
-                <div>
-                    <input type="submit" id="play-again" value="Play Again?" />
-                </div>
-                <div>
-                    <input type="submit" id="reset" value="Reset" />
-                </div>
-            </form>
-        </dialog>
-        <output></output>
+                    <div class="play-button-div">
+                        <button type="submit" id="play-game">Play!</button>
+                    </div>
+                </form>
+            </dialog>
+            <dialog id="dialog-play-again">
+                <h2 class="result"></h2>
+                <form method="dialog">
+                    <div>
+                        <input
+                            type="submit"
+                            id="play-again"
+                            value="Play Again?"
+                        />
+                    </div>
+                    <div>
+                        <input type="submit" id="reset" value="Reset" />
+                    </div>
+                </form>
+            </dialog>
+        </div>
     </body>
 </html>

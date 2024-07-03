@@ -162,6 +162,7 @@ const displayController = (function () {
                 .removeEventListener("mouseout", mouseoutEvent);
             displayGrid.querySelector(`.cell-${i}`).textContent = "";
         }
+        document.getElementById("dialog-play-again").classList.remove("winner");
     };
 
     const mouseoverEvent = (event) => {
@@ -247,8 +248,10 @@ const game = (function () {
     const playAgain = (gameResult) => {
         if (gameResult === 1) {
             result.textContent = `You win, ${playerOne.name}! 🎉`;
+            dialogPlayAgain.classList.add("winner");
         } else if (gameResult === 2) {
             result.textContent = `You win, ${playerTwo.name}! 🎉`;
+            dialogPlayAgain.classList.add("winner");
         } else {
             result.textContent = "It's a tie! Good game!";
         }
