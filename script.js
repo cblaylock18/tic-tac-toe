@@ -158,6 +158,9 @@ const displayController = (function () {
                 .removeEventListener("mouseout", mouseoutEvent);
             displayGrid.querySelector(`.cell-${i}`).textContent = "";
         }
+        document.querySelector("#player-ones-name").value = "";
+
+        document.querySelector("#player-twos-name").value = "";
     };
 
     const mouseoverEvent = (event) => {
@@ -192,10 +195,6 @@ const game = (function () {
 
     const dialog = document.getElementById("dialog");
     const playerForm = document.querySelector(".input-form");
-    const playerOneNameInput = document.querySelector("#player-ones-name");
-    const playerOneSymbolInput = document.querySelector("#player-ones-symbol");
-    const playerTwoNameInput = document.querySelector("#player-twos-name");
-    const playerTwoSymbolInput = document.querySelector("#player-twos-symbol");
 
     const dialogPlayAgain = document.getElementById("dialog-play-again");
     const playAgainBtn = dialogPlayAgain.querySelector("#play-again");
@@ -246,9 +245,9 @@ const game = (function () {
 
     const playAgain = (gameResult) => {
         if (gameResult === 1) {
-            result.textContent = `You win, ${playerOne.name}!`;
+            result.textContent = `You win, ${playerOne.name}! 🎉`;
         } else if (gameResult === 2) {
-            result.textContent = `You win, ${playerTwo.name}!`;
+            result.textContent = `You win, ${playerTwo.name}! 🎉`;
         } else {
             result.textContent = "It's a tie! Good game!";
         }
@@ -262,6 +261,15 @@ const game = (function () {
 
     const playGameBtnFunction = (event) => {
         event.preventDefault();
+        const playerOneNameInput = document.querySelector("#player-ones-name");
+        const playerOneSymbolInput = document.querySelector(
+            'input[name="player-ones-symbol"]:checked'
+        );
+        const playerTwoNameInput = document.querySelector("#player-twos-name");
+        const playerTwoSymbolInput = document.querySelector(
+            'input[name="player-twos-symbol"]:checked'
+        );
+        console.log(playerOneSymbolInput.value);
         if (playerForm.checkValidity()) {
             playerOne = createPlayer(
                 playerOneNameInput.value,

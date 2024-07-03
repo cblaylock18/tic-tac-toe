@@ -13,13 +13,13 @@
             <div class="player-1 your-turn">
                 <span class="player-1-name name"></span>
                 <span class="player-1-symbol symbol"></span>
-                <span>Wins:</span>
+                <span>Wins</span>
                 <span class="player-1-score score">0</span>
             </div>
             <div class="player-2">
                 <span class="player-2-name name"></span>
                 <span class="player-2-symbol symbol"></span>
-                <span>Wins:</span>
+                <span>Wins</span>
                 <span class="player-2-score score">0</span>
             </div>
         </div>
@@ -38,54 +38,93 @@
             <form method="dialog" class="input-form">
                 <div class="player-1-input-info">
                     <div class="input-info">
-                        <label> Player One's Name</label>
+                        <label> Player One</label>
                         <input
                             type="text"
                             id="player-ones-name"
                             name="player-ones-name"
-                            value="sidneyy"
+                            placeholder="Player One's Name"
                             required
                         />
                     </div>
                     <div class="input-info">
-                        <label> Player One's Symbol</label>
                         <div>
-                            <input
-                                type="text"
-                                id="player-ones-symbol"
-                                name="player-ones-symbol"
-                                value="X"
-                                required
-                                minlength="1"
-                                maxlength="1"
-                            />
+                            <fieldset>
+                                <legend>Select a Symbol!</legend>
+                                <div>
+                                    <input
+                                        type="radio"
+                                        id="X"
+                                        name="player-ones-symbol"
+                                        value="❌"
+                                        checked
+                                        required
+                                    />
+                                    <label for="X">❌</label>
+                                    <input
+                                        type="radio"
+                                        id="lamb"
+                                        name="player-ones-symbol"
+                                        value="🐑"
+                                        required
+                                    />
+                                    <label for="lamb">🐑</label>
+                                    <input
+                                        type="radio"
+                                        id="apple"
+                                        name="player-ones-symbol"
+                                        value="🍎"
+                                        required
+                                    />
+                                    <label for="apple">🍎</label>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
                 </div>
                 <div class="player-2-input-info">
                     <div class="input-info">
-                        <label> Player Two's Name</label>
+                        <label> Player Two</label>
                         <input
                             type="text"
                             id="player-twos-name"
                             name="player-twos-name"
-                            value="lambb"
+                            placeholder="Player Two's Name"
                             required
                         />
                     </div>
                     <div class="input-info">
-                        <label> Player Two's Symbol</label>
-
                         <div>
-                            <input
-                                type="text"
-                                id="player-twos-symbol"
-                                name="player-twos-symbol"
-                                value="O"
-                                required
-                                minlength="1"
-                                maxlength="1"
-                            />
+                            <fieldset>
+                                <legend>Select a Symbol!</legend>
+                                <div>
+                                    <input
+                                        type="radio"
+                                        id="O"
+                                        name="player-twos-symbol"
+                                        value="🇴"
+                                        required
+                                        checked
+                                    />
+                                    <label for="O">🇴</label>
+                                    <input
+                                        type="radio"
+                                        id="llama"
+                                        name="player-twos-symbol"
+                                        value="🦙"
+                                        required
+                                    />
+                                    <label for="llama">🦙</label>
+                                    <input
+                                        type="radio"
+                                        id="orange"
+                                        name="player-twos-symbol"
+                                        value="🍊"
+                                        required
+                                    />
+                                    <label for="orange">🍊</label>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
                 </div>
