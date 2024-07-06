@@ -149,8 +149,9 @@ body > div {
     background-image: url(./imgs/dryerase.webp);
     background-repeat: no-repeat;
     background-position: top 50px center;
-    background-size: clamp(500px, 80%, 100vh) clamp(900px, 80%, 100vh);
-    height: 100vh;
+    background-size: 1000px 1000px;
+    height: 1200px;
+    object-fit: contain;
 }
 
 h1 {
